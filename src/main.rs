@@ -1,8 +1,11 @@
-use sdl2::{event::Event, pixels::Color};
+use sdl2::{event::Event, pixels::Color, rect::Rect};
 
-const WIDTH: u32 = 700;
-const HEIGHT: u32 = 700;
-const BACKGROUND_COLOR: Color = Color::RGB(0, 0, 0);
+const WIDTH: u32 = 720;
+const HEIGHT: u32 = 720;
+const CELL_SIZE: u32 = WIDTH / 8;
+const BLACK_COLOR: Color = Color::RGB(133, 77, 39);
+const WHITE_COLOR: Color = Color::RGB(235, 210, 162);
+const CLEAR_COLOR: Color = Color::RGB(0, 0, 0);
 
 fn main() {
     let sdl_context = sdl2::init().expect("Failed to initialize SDL2 context");
@@ -36,8 +39,27 @@ fn main() {
             }
         }
 
-        canvas.set_draw_color(BACKGROUND_COLOR);
+        canvas.set_draw_color(CLEAR_COLOR);
         canvas.clear();
+
+        // Draw squares
+        for file in 0..8 {
+            for rank in 0..8 {
+                if (file + rank) % 2 == 0 {
+                    canvas.set_draw_color(BLACK_COLOR);
+                } else {
+                    canvas.set_draw_color(WHITE_COLOR);
+                }
+                canvas
+                    .fill_rect(Rect::new(
+                        (rank * CELL_SIZE) as i32,
+                        (file * CELL_SIZE) as i32,
+                        CELL_SIZE,
+                        CELL_SIZE,
+                    ))
+                    .unwrap();
+            }
+        }
 
         // Draw graphics
         canvas.present();
