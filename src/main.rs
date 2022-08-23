@@ -46,9 +46,9 @@ fn main() {
         for file in 0..8 {
             for rank in 0..8 {
                 if (file + rank) % 2 == 0 {
-                    canvas.set_draw_color(BLACK_COLOR);
-                } else {
                     canvas.set_draw_color(WHITE_COLOR);
+                } else {
+                    canvas.set_draw_color(BLACK_COLOR);
                 }
                 canvas
                     .fill_rect(Rect::new(
