@@ -1,4 +1,7 @@
-use sdl2::{event::Event, pixels::Color, rect::Rect};
+use sdl2::{
+    event::Event, image::InitFlag, image::LoadSurface, pixels::Color, rect::Rect,
+    render::BlendMode, surface::Surface,
+};
 
 const WIDTH: u32 = 720;
 const HEIGHT: u32 = 720;
@@ -28,6 +31,20 @@ fn main() {
             .build()
             .expect("Failed to get render canvas")
     };
+
+    let _image_context = sdl2::image::init(InitFlag::PNG).expect("Failed initializing SDL2_image");
+    let mut piece_surface =
+        Surface::from_file("assets/white_pawn.png").expect("Failed to load image from file");
+
+    piece_surface
+        .set_color_key(true, Color::RGB(0, 0, 0))
+        .expect("Failed to convert black pixels to transparent");
+
+    let texture_creator = canvas.texture_creator();
+    let mut piece_sprite = texture_creator
+        .create_texture_from_surface(piece_surface)
+        .expect("Failed to create texture from surface");
+    piece_sprite.set_blend_mode(BlendMode::Add);
 
     let mut events = sdl_context.event_pump().expect("Failed to get event loop");
 
@@ -60,6 +77,10 @@ fn main() {
                     .unwrap();
             }
         }
+
+        canvas
+            .copy(&piece_sprite, None, Rect::new(10, 630, 60, 80))
+            .expect("Failed to blit texture to the screen");
 
         // Draw graphics
         canvas.present();
