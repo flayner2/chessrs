@@ -5,6 +5,12 @@ use sdl2::{
 
 mod graphics;
 
+use graphics::{
+    piece::Piece,
+    square::{self, Square},
+    ColorType,
+};
+
 const WIDTH: u32 = 720;
 const HEIGHT: u32 = 720;
 const CELL_SIZE: u32 = WIDTH / 8;
@@ -35,6 +41,18 @@ fn main() {
 
     let mut events = sdl_context.event_pump().expect("Failed to get event loop");
 
+    let mut squares: Vec<Square> = Vec::new();
+
+    for file in 0..8 {
+        for rank in 0..8 {
+            if (file + rank) % 2 == 0 {
+                squares.push(Square::new(rank, file, CELL_SIZE, ColorType::White, None));
+            } else {
+                squares.push(Square::new(rank, file, CELL_SIZE, ColorType::Black, None));
+            }
+        }
+    }
+
     loop {
         for event in events.poll_iter() {
             match event {
@@ -47,22 +65,8 @@ fn main() {
         canvas.clear();
 
         // Draw squares
-        for file in 0..8 {
-            for rank in 0..8 {
-                if (file + rank) % 2 == 0 {
-                    canvas.set_draw_color(graphics::WHITE_COLOR);
-                } else {
-                    canvas.set_draw_color(graphics::BLACK_COLOR);
-                }
-                canvas
-                    .fill_rect(Rect::new(
-                        (rank * CELL_SIZE) as i32,
-                        (file * CELL_SIZE) as i32,
-                        CELL_SIZE,
-                        CELL_SIZE,
-                    ))
-                    .unwrap();
-            }
+        for square in &squares {
+            square.display(&mut canvas).unwrap();
         }
 
         // Draw graphics

@@ -1,18 +1,18 @@
-use super::common::ColorType;
 use super::piece::Piece;
+use super::ColorType;
 use super::{BLACK_COLOR, WHITE_COLOR};
 use sdl2::rect::Rect;
 
-pub struct Square {
+pub struct Square<'a> {
     pub x: u32,
     pub y: u32,
     pub size: u32,
     pub color: ColorType,
-    pub piece: Option<&'static Piece>,
+    pub piece: Option<&'a Piece<'a>>,
 }
 
-impl Square {
-    pub fn new(x: u32, y: u32, size: u32, color: ColorType, piece: Option<&'static Piece>) -> Self {
+impl<'a> Square<'a> {
+    pub fn new(x: u32, y: u32, size: u32, color: ColorType, piece: Option<&'a Piece>) -> Self {
         Self {
             x,
             y,
@@ -38,9 +38,8 @@ impl Square {
             self.size,
         ))?;
 
-        match self.piece {
-            Some(piece) => piece.draw(self, canvas),
-            None => Ok(()),
+        if let Some(piece) = self.piece {
+            piece.draw(self, canvas)?;
         };
 
         Ok(())
