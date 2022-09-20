@@ -1,13 +1,12 @@
 use sdl2::{
-    event::Event, image::InitFlag, image::LoadSurface, pixels::Color, rect::Rect,
-    render::BlendMode, surface::Surface,
+    event::Event, image::InitFlag 
 };
 
 mod graphics;
 
 use graphics::{
     piece::Piece,
-    square::{self, Square},
+    square::Square,
     ColorType,
 };
 
