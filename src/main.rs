@@ -3,6 +3,7 @@ use sdl2::{
 };
 
 mod graphics;
+mod engine;
 
 use graphics::{
     piece::Piece,
