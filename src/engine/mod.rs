@@ -1,3 +1,3 @@
 mod piece;
 mod fen;
-mod piece_list;
+mod board;
